@@ -1,0 +1,30 @@
+{
+  "name": "rekvizity",
+  "version": "0.1.0",
+  "description": "Проверка российских реквизитов: ИНН, ОГРН, КПП, СНИЛС, БИК, счёт, карта — с объяснением ошибки",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ozziess01/rekvizity.git",
+    "directory": "js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"test/**/*.test.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}
