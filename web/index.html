@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Проверка реквизитов — ИНН, ОГРН, КПП, СНИЛС, БИК, счёт, карта</title>
+    <meta
+      name="description"
+      content="Проверка ИНН, ОГРН, КПП, СНИЛС, БИК, расчётного счёта и номера карты по контрольным цифрам. Объясняет, что не так, и показывает, что видно из номера. Работает в браузере, номера никуда не отправляются."
+    />
+    <meta name="theme-color" content="#0b0e1a" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236c4cff'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="page">
+      <header class="top">
+        <a class="back" href="https://fedorov-n.ru/">← fedorov-n.ru</a>
+        <a class="gh" href="https://github.com/Ozziess01/rekvizity">Код на GitHub</a>
+      </header>
+
+      <h1>Проверка реквизитов</h1>
+      <p class="lead">
+        Вставьте ИНН, ОГРН, КПП, СНИЛС, БИК, номер счёта или карты. Страница сама поймёт, что это,
+        проверит контрольные цифры и объяснит, что не так. Номера никуда не отправляются: всё
+        считается у вас в браузере.
+      </p>
+
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tab-one" aria-selected="true" aria-controls="one">Один номер</button>
+        <button role="tab" id="tab-list" aria-selected="false" aria-controls="list">Список</button>
+      </div>
+
+      <div class="kinds" id="kinds" role="radiogroup" aria-label="Что проверять"></div>
+
+      <section id="one" role="tabpanel" aria-labelledby="tab-one">
+        <label class="sr" for="input">Номер</label>
+        <input
+          id="input"
+          class="big"
+          inputmode="text"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Например, 7707083893"
+        />
+        <div class="bik-row" id="bikrow" hidden>
+          <label for="bik">БИК банка</label>
+          <input id="bik" class="mid" autocomplete="off" spellcheck="false" placeholder="044525225" />
+          <span class="muted">без него контрольную цифру счёта не проверить</span>
+        </div>
+        <div class="examples" id="examples"></div>
+        <div id="results" aria-live="polite"></div>
+      </section>
+
+      <section id="list" role="tabpanel" aria-labelledby="tab-list" hidden>
+        <label class="sr" for="bulk">Номера по одному в строке</label>
+        <textarea id="bulk" rows="8" spellcheck="false" placeholder="По одному номеру в строке"></textarea>
+        <p class="hint">
+          По одному номеру в строке. Для счёта допишите БИК банка через точку с запятой:
+          <code>40702810938000012345; 044525225</code>
+        </p>
+        <div class="bulk-bar">
+          <span id="summary"></span>
+          <label class="check"><input type="checkbox" id="only-bad" /> только ошибки</label>
+          <button id="sample" class="ghost">Вставить пример</button>
+          <button id="csv" class="ghost" disabled>Скачать CSV</button>
+        </div>
+        <div class="table-wrap"><table id="table" hidden></table></div>
+      </section>
+
+      <section class="how">
+        <h2>Как это проверяется</h2>
+        <dl>
+          <dt>ИНН</dt>
+          <dd>
+            10 цифр у организации, 12 у человека и ИП. Последние одна или две цифры контрольные:
+            остальные умножаются на заданные веса, сумма делится на 11. Первые две цифры —
+            регион.
+          </dd>
+          <dt>ОГРН и ОГРНИП</dt>
+          <dd>
+            13 и 15 цифр. Число без последней цифры делится на 11 (у ИП на 13), последняя цифра
+            остатка должна совпасть с контрольной. Вторая и третья цифры — год записи.
+          </dd>
+          <dt>СНИЛС</dt>
+          <dd>
+            11 цифр. Первые девять умножаются на 9, 8, 7 … 1, из суммы получается контрольное число
+            — последние две цифры.
+          </dd>
+          <dt>Счёт</dt>
+          <dd>
+            20 цифр, проверяется только вместе с БИК: к счёту спереди приписываются три последние
+            цифры БИК, всё умножается на 7, 1, 3, 7, 1, 3… Сумма должна делиться на 10. Поэтому
+            счёт с чужим БИК не пройдёт.
+          </dd>
+          <dt>Карта</dt>
+          <dd>Алгоритм Луна: каждая вторая цифра с конца удваивается, сумма должна делиться на 10.</dd>
+          <dt>БИК и КПП</dt>
+          <dd>
+            По 9 символов, контрольной цифры нет. Проверяется формат: БИК российского банка
+            начинается с 04, в КПП на 5–6 месте бывают латинские буквы.
+          </dd>
+        </dl>
+        <p class="muted">
+          Верная контрольная цифра значит, что в номере нет опечатки. Существует ли такая
+          организация или счёт, по номеру не узнать: это проверяют в ФНС и в банке.
+        </p>
+      </section>
+
+      <footer>
+        Библиотеки для Go и TypeScript с этими же проверками —
+        <a href="https://github.com/Ozziess01/rekvizity">github.com/Ozziess01/rekvizity</a>. Автор —
+        <a href="https://fedorov-n.ru/">Никита Федоров</a>.
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

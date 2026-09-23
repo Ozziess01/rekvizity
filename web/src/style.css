@@ -1,0 +1,485 @@
+/* Та же палитра, что у fedorov-n.ru: тёмно-синий фон, фиолетовый акцент. */
+:root {
+  color-scheme: dark;
+  --bg: #0b0e1a;
+  --panel: #12172a;
+  --panel-2: #171d33;
+  --line: #21283f;
+  --line-2: #2c3452;
+  --text: #e9ebf4;
+  --soft: #c4c8d8;
+  --muted: #8a91a8;
+  --accent: #6c4cff;
+  --accent-soft: rgba(108, 76, 255, 0.15);
+  --accent-text: #b1a2ff;
+  --ok: #34d399;
+  --ok-soft: rgba(52, 211, 153, 0.12);
+  --bad: #f87171;
+  --bad-soft: rgba(248, 113, 113, 0.12);
+  --wait: #fbbf24;
+  --wait-soft: rgba(251, 191, 36, 0.12);
+  --r: 16px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.55 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: var(--accent-text);
+}
+[hidden] {
+  display: none !important;
+}
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+code,
+.mono {
+  font-family: var(--mono);
+}
+code {
+  font-size: 0.88em;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d9d1ff;
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+.top a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.top a:hover {
+  color: var(--text);
+}
+
+h1 {
+  font-size: clamp(30px, 6vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+.lead {
+  color: var(--soft);
+  font-size: 17px;
+  max-width: 660px;
+  margin: 0 0 32px;
+}
+
+/* ---------- вкладки и выбор вида ---------- */
+
+.tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  margin-bottom: 14px;
+}
+.tabs button {
+  border: 0;
+  background: none;
+  padding: 8px 16px;
+  border-radius: 9px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.tabs button[aria-selected="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+
+.kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.kinds button {
+  border: 1px solid var(--line-2);
+  background: none;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--soft);
+}
+.kinds button:hover {
+  border-color: var(--accent-text);
+}
+.kinds button[aria-checked="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+/* ---------- поля ---------- */
+
+input.big,
+input.mid,
+textarea {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  color: var(--text);
+  font-family: var(--mono);
+  outline: none;
+  transition: border-color 0.15s;
+}
+input.big {
+  font-size: clamp(20px, 4.5vw, 28px);
+  padding: 18px 20px;
+  letter-spacing: 0.02em;
+}
+input.big:focus,
+input.mid:focus,
+textarea:focus {
+  border-color: var(--accent);
+}
+::placeholder {
+  color: #4b526c;
+}
+
+.bik-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 10px;
+}
+.bik-row label {
+  font-weight: 500;
+}
+input.mid {
+  width: 190px;
+  font-size: 17px;
+  padding: 9px 14px;
+  border-radius: 12px;
+}
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 20px;
+}
+.examples .muted {
+  margin-right: 4px;
+}
+.chip {
+  border: 0;
+  background: var(--panel-2);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--soft);
+}
+.chip:hover {
+  background: var(--line-2);
+  color: var(--text);
+}
+
+/* ---------- карточка результата ---------- */
+
+.card {
+  --c: var(--muted);
+  --c-soft: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--c);
+  background: var(--panel);
+  border-radius: var(--r);
+  padding: 18px 20px;
+  margin-bottom: 12px;
+}
+.card.ok {
+  --c: var(--ok);
+  --c-soft: var(--ok-soft);
+}
+.card.bad {
+  --c: var(--bad);
+  --c-soft: var(--bad-soft);
+}
+.card.wait {
+  --c: var(--wait);
+  --c-soft: var(--wait-soft);
+}
+.card.alt {
+  opacity: 0.8;
+}
+.alt-note {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.card header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.kind {
+  font-weight: 700;
+  font-size: 18px;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 7px;
+  border-radius: 999px;
+  background: var(--c-soft);
+  color: var(--c);
+  font-weight: 600;
+  font-size: 14px;
+}
+.card.unknown .status {
+  padding-left: 10px;
+}
+.msg {
+  margin: 12px 0 0;
+  color: var(--soft);
+}
+
+.anatomy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 16px;
+}
+.part {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.part b {
+  font: 500 clamp(17px, 3.6vw, 22px) / 1 var(--mono);
+  letter-spacing: 0.04em;
+  padding: 8px 8px;
+  border-radius: 8px;
+  background: var(--panel-2);
+  text-align: center;
+}
+.part i {
+  font-style: normal;
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--muted);
+  text-align: center;
+  max-width: 14ch;
+  margin: 0 auto;
+}
+.part.control b {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+.part.control.bad b {
+  background: var(--bad-soft);
+  color: var(--bad);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px 20px;
+  margin: 16px 0 0;
+}
+.facts div {
+  min-width: 0;
+}
+.facts dt {
+  font-size: 12px;
+  color: var(--muted);
+}
+.facts dd {
+  margin: 1px 0 0;
+  font-weight: 500;
+}
+
+/* ---------- список ---------- */
+
+textarea {
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 14px 16px;
+  resize: vertical;
+}
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 8px 0 14px;
+}
+.bulk-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-bottom: 12px;
+}
+#summary {
+  margin-right: auto;
+  color: var(--soft);
+}
+.t-ok {
+  color: var(--ok);
+}
+.t-bad {
+  color: var(--bad);
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--soft);
+}
+.ghost {
+  border: 1px solid var(--line-2);
+  background: none;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.ghost:hover:not(:disabled) {
+  border-color: var(--accent-text);
+}
+.ghost:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.table-wrap:has(table[hidden]) {
+  display: none;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th,
+td {
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+th {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 12px;
+  background: var(--panel);
+}
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+td.n {
+  color: var(--muted);
+}
+td.mono {
+  white-space: nowrap;
+}
+tr.ok .st {
+  color: var(--ok);
+}
+tr.bad .st {
+  color: var(--bad);
+}
+tr.wait .st {
+  color: var(--wait);
+}
+td.st {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* ---------- как это устроено ---------- */
+
+.how {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.how h2 {
+  font-size: 22px;
+  margin: 0 0 18px;
+}
+.how dl {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 12px 20px;
+  margin: 0 0 18px;
+}
+.how dt {
+  font-weight: 600;
+}
+.how dd {
+  margin: 0;
+  color: var(--soft);
+}
+
+footer {
+  margin-top: 40px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 560px) {
+  .how dl {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .how dd {
+    margin-bottom: 12px;
+  }
+  .top {
+    margin-bottom: 28px;
+  }
+}
